@@ -40,6 +40,8 @@ dependencies:
   path_provider: ^2.1.1
   path: ^1.8.3
   highlighter: ^0.1.1
+  markdown_toolbar: ^0.5.0
+  markdown: ^7.1.1
 
 dev_dependencies:
   flutter_test:

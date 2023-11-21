@@ -1,3 +1,4 @@
+import 'package:markdown/markdown.dart';
 import 'package:ssbg_flutter/scripts/md_highlighter.dart';
 
 String propPrefix = "---\n";
@@ -58,14 +59,17 @@ String mdScanner(String markdown) {
     }
   }
 
+  // this is for the highlight
   for (var c in strFunc) {
     var key = c.keys.firstOrNull;
     var value = c.values.firstOrNull;
     String hlHTML = mdHighlighter("$value", "$key");
     String replaced =
         "$funcPrefix highlight $key $funcSuffix\n$value$funcPrefix endhighlight $funcSuffix";
-    markdown = markdown.replaceAll(replaced, hlHTML);
+    mdContent = mdContent.replaceAll(replaced, hlHTML);
   }
+
+  print(markdownToHtml(mdContent));
 
   return markdown;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:ssbg_flutter/models/list_model.dart';
 
 class GlobalProvider with ChangeNotifier {
   String _blogDir = "";
@@ -9,54 +10,54 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List _listInclude = [];
-  List get listInclude => _listInclude;
+  List<ListModel> _listInclude = <ListModel>[];
+  List<ListModel> get listInclude => _listInclude;
 
-  void addInclude(Map map) {
-    _listInclude.add(map);
+  void addInclude(ListModel listModel) {
+    _listInclude.add(listModel);
     notifyListeners();
   }
 
-  void setInclude(List list) {
+  void setInclude(List<ListModel> list) {
     _listInclude = list;
     notifyListeners();
   }
 
-  List _listLayout = [];
-  List get listLayout => _listLayout;
+  List<ListModel> _listLayout = <ListModel>[];
+  List<ListModel> get listLayout => _listLayout;
 
-  void addLayout(Map map) {
-    _listLayout.add(map);
+  void addLayout(ListModel listModel) {
+    _listLayout.add(listModel);
     notifyListeners();
   }
 
-  void setLayout(List list) {
+  void setLayout(List<ListModel> list) {
     _listLayout = list;
     notifyListeners();
   }
 
-  List _listPage = [];
-  List get listPage => _listPage;
+  List<ListModel> _listPage = <ListModel>[];
+  List<ListModel> get listPage => _listPage;
 
-  void addPage(Map map) {
-    _listPage.add(map);
+  void addPage(ListModel listModel) {
+    _listPage.add(listModel);
     notifyListeners();
   }
 
-  void setPage(List list) {
+  void setPage(List<ListModel> list) {
     _listPage = list;
     notifyListeners();
   }
 
-  List _listPost = [];
-  List get listPost => _listPost;
+  List<ListModel> _listPost = <ListModel>[];
+  List<ListModel> get listPost => _listPost;
 
-  void addPost(Map map) {
-    _listPost.add(map);
+  void addPost(ListModel listModel) {
+    _listPost.add(listModel);
     notifyListeners();
   }
 
-  void setPost(List list) {
+  void setPost(List<ListModel> list) {
     _listPost = list;
     notifyListeners();
   }

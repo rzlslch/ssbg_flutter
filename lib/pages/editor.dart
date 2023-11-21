@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:provider/provider.dart';
 import 'package:ssbg_flutter/providers/editor_provider.dart';
 import 'package:ssbg_flutter/scripts/md_scanner.dart';
@@ -19,6 +21,7 @@ class EditorPage extends StatelessWidget {
     TextEditingController editorController =
         TextEditingController(text: editorProvider.value);
     Timer? debounce;
+    final FocusNode focusNode = FocusNode();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -48,25 +51,87 @@ class EditorPage extends StatelessWidget {
           child: Padding(
             padding:
                 const EdgeInsets.only(bottom: 0, top: 0, left: 8, right: 8),
-            child: TextFormField(
-              controller: editorController,
-              maxLines: null,
-              expands: true,
-              style: const TextStyle(
-                fontSize: 14,
-                height: 1.1,
-              ),
-              onChanged: (value) {
-                if (debounce?.isActive ?? false) debounce?.cancel();
-                debounce = Timer(const Duration(milliseconds: 500), () {
-                  final File file = File(editorProvider.path);
-                  file.writeAsString(value);
-                });
-              },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MarkdownToolbar(
+                  useIncludedTextField: false,
+                  controller: editorController,
+                  focusNode: focusNode,
+                  width: 32,
+                ),
+                const Divider(),
+                Actions(
+                  actions: {InsertTabIntent: InsertTabAction()},
+                  child: Expanded(
+                    child: Shortcuts(
+                      shortcuts: {
+                        LogicalKeySet(LogicalKeyboardKey.tab):
+                            InsertTabIntent(2, editorController)
+                      },
+                      child: TextFormField(
+                        controller: editorController,
+                        focusNode: focusNode,
+                        maxLines: null,
+                        expands: true,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.1,
+                        ),
+                        decoration:
+                            const InputDecoration.collapsed(hintText: ""),
+                        onChanged: (value) {
+                          if (debounce?.isActive ?? false) debounce?.cancel();
+                          debounce =
+                              Timer(const Duration(milliseconds: 500), () {
+                            final File file = File(editorProvider.path);
+                            file.writeAsString(value);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const Divider(),
+              ],
             ),
           ),
         )))
       ],
     );
+  }
+}
+
+class InsertTabIntent extends Intent {
+  const InsertTabIntent(this.numSpaces, this.textController);
+  final int numSpaces;
+  final TextEditingController textController;
+}
+
+class InsertTabAction extends Action {
+  @override
+  Object invoke(covariant Intent intent) {
+    if (intent is InsertTabIntent) {
+      final oldValue = intent.textController.value;
+      final newComposing = TextRange.collapsed(oldValue.composing.start);
+      final newSelection = TextSelection.collapsed(
+          offset: oldValue.selection.start + intent.numSpaces);
+
+      final newText = StringBuffer(oldValue.selection.isValid
+          ? oldValue.selection.textBefore(oldValue.text)
+          : oldValue.text);
+      for (var i = 0; i < intent.numSpaces; i++) {
+        newText.write(' ');
+      }
+      newText.write(oldValue.selection.isValid
+          ? oldValue.selection.textAfter(oldValue.text)
+          : '');
+      intent.textController.value = intent.textController.value.copyWith(
+        composing: newComposing,
+        text: newText.toString(),
+        selection: newSelection,
+      );
+    }
+    return '';
   }
 }

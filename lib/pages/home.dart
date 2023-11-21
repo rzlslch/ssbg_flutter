@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +7,7 @@ import 'package:ssbg_flutter/models/file_model.dart';
 import 'package:ssbg_flutter/providers/list_provider.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
+import 'package:ssbg_flutter/scripts/setup_dir.dart';
 import 'package:ssbg_flutter/widgets/menu_button.dart';
 
 List menu = <Map>[
@@ -34,11 +34,7 @@ class HomePage extends StatelessWidget {
                 backgroundColor: Colors.amber,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(1))),
-            onPressed: () async {
-              String? selectedDirectory =
-                  await FilePicker.platform.getDirectoryPath();
-              globalProvider.setDir(selectedDirectory ?? "");
-            },
+            onPressed: () => setupDir(globalProvider),
             child: const SizedBox(
                 width: 200, child: Center(child: Icon(Icons.folder)))),
         title: Consumer<GlobalProvider>(
