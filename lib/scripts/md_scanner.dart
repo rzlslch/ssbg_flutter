@@ -1,33 +1,11 @@
 import 'package:markdown/markdown.dart';
 import 'package:ssbg_flutter/scripts/md_highlighter.dart';
 
-String propPrefix = "---\n";
-String propSuffix = "\n---\n";
 String funcPrefix = "{%";
 String funcSuffix = "%}";
 
 String mdScanner(String markdown) {
-  int propPrefixIndex = markdown.indexOf(propPrefix);
-  int propSuffixIndex = markdown.lastIndexOf(propSuffix);
-  String propString = "";
   String mdContent = markdown;
-
-  if (propPrefixIndex > -1 && propSuffixIndex > -1) {
-    propString = markdown.substring(
-        propPrefixIndex + propPrefix.length, propSuffixIndex);
-    mdContent = markdown.replaceRange(
-        propPrefixIndex, propSuffixIndex + propSuffix.length, "");
-  }
-
-  Map<String, String> props = {};
-
-  for (var c in propString.split("\n")) {
-    List<String> propC = c.split(":");
-    String propKey = propC[0].toString().trim();
-    propC.removeAt(0);
-    String propValue = propC.join(":").trim();
-    props[propKey] = propValue;
-  }
 
   String mdHighlight = "";
   bool startRecord = false;
@@ -69,7 +47,7 @@ String mdScanner(String markdown) {
     mdContent = mdContent.replaceAll(replaced, hlHTML);
   }
 
-  print(markdownToHtml(mdContent));
+  String content = markdownToHtml(mdContent);
 
-  return markdown;
+  return content;
 }

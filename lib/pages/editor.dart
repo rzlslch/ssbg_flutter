@@ -6,7 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:provider/provider.dart';
 import 'package:ssbg_flutter/providers/editor_provider.dart';
-import 'package:ssbg_flutter/scripts/md_scanner.dart';
+import 'package:ssbg_flutter/providers/global_provider.dart';
+import 'package:ssbg_flutter/scripts/generator.dart';
 import 'package:ssbg_flutter/widgets/header_button.dart';
 
 import '../widgets/action_button.dart';
@@ -20,6 +21,8 @@ class EditorPage extends StatelessWidget {
         Provider.of<EditorProvider>(context, listen: false);
     TextEditingController editorController =
         TextEditingController(text: editorProvider.value);
+    GlobalProvider globalProvider =
+        Provider.of<GlobalProvider>(context, listen: false);
     Timer? debounce;
     final FocusNode focusNode = FocusNode();
     return Column(
@@ -33,7 +36,7 @@ class EditorPage extends StatelessWidget {
           children: [
             ActionButton(
                 function: () {
-                  mdScanner(editorController.text);
+                  generator(globalProvider, editorController.text);
                 },
                 text: "GENERATE",
                 icon: Icons.replay_rounded)
