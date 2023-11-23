@@ -64,7 +64,7 @@ class EditorPage extends StatelessWidget {
           ),
           child: Padding(
             padding:
-                const EdgeInsets.only(bottom: 0, top: 0, left: 8, right: 8),
+                const EdgeInsets.only(bottom: 0, top: 8, left: 8, right: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

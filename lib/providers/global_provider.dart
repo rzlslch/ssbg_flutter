@@ -10,6 +10,14 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Map<String, String> _config = {};
+  Map<String, String> get config => _config;
+
+  void setConfig(config) {
+    _config = config;
+    notifyListeners();
+  }
+
   List<ListModel> _listInclude = <ListModel>[];
   List<ListModel> get listInclude => _listInclude;
 

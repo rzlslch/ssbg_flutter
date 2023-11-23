@@ -16,12 +16,26 @@ Future<void> setupDir(GlobalProvider globalProvider) async {
   globalProvider.setDir(selectedDirectory ?? "");
   if (selectedDirectory != null) {
     for (var c in folder) {
-      List<ListModel> list = Directory(join(selectedDirectory, c.keys.first))
-          .listSync()
-          .map((e) => ListModel(e))
-          .cast<ListModel>()
-          .toList();
-      c.values.first(list);
+      String pathDir = join(selectedDirectory, c.keys.first);
+      Directory dir = Directory(pathDir);
+
+      if (dir.existsSync()) {
+        List<ListModel> list = Directory(join(selectedDirectory, c.keys.first))
+            .listSync()
+            .map((e) => ListModel(e))
+            .cast<ListModel>()
+            .toList();
+        c.values.first(list);
+      } else {
+        dir.createSync(recursive: true);
+      }
+    }
+
+    String configPathFile = join(selectedDirectory, "_config", "_config.yml");
+    File configFile = File(configPathFile);
+    if (!configFile.existsSync()) {
+      configFile.createSync(recursive: true);
+      configFile.writeAsStringSync("title: title-example\nurl: url.example.io");
     }
   }
 }

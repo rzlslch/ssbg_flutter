@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ssbg_flutter/pages/scenes/form_scene.dart';
 import 'package:ssbg_flutter/pages/scenes/list_scene.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
 import 'package:ssbg_flutter/widgets/header_button.dart';
@@ -23,7 +24,7 @@ class _ListPageState extends State<ListPage> {
         const SizedBox(
           height: 10,
         ),
-        pageProvider.pageType == "list" ? const ListScene() : Container()
+        pageProvider.pageType == "list" ? const ListScene() : const FormScene()
       ],
     );
   }
