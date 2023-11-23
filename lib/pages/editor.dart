@@ -19,13 +19,13 @@ class EditorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final EditorProvider editorProvider =
         Provider.of<EditorProvider>(context, listen: false);
-    TextEditingController editorController =
-        TextEditingController(text: editorProvider.value);
     GlobalProvider globalProvider =
         Provider.of<GlobalProvider>(context, listen: false);
     PageProvider pageProvider =
         Provider.of<PageProvider>(context, listen: false);
     Timer? debounce;
+    TextEditingController editorController =
+        TextEditingController(text: editorProvider.value);
     final FocusNode focusNode = FocusNode();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

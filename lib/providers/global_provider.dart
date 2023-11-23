@@ -13,7 +13,7 @@ class GlobalProvider with ChangeNotifier {
   Map<String, String> _config = {};
   Map<String, String> get config => _config;
 
-  void setConfig(config) {
+  void setConfig(Map<String, String> config) {
     _config = config;
     notifyListeners();
   }

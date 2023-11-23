@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
 import 'package:ssbg_flutter/models/list_model.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
+import 'package:yaml/yaml.dart';
 
 Future<void> setupDir(GlobalProvider globalProvider) async {
   List<Map<String, Function>> folder = [
@@ -35,7 +36,11 @@ Future<void> setupDir(GlobalProvider globalProvider) async {
     File configFile = File(configPathFile);
     if (!configFile.existsSync()) {
       configFile.createSync(recursive: true);
-      configFile.writeAsStringSync("title: title-example\nurl: url.example.io");
+      configFile.writeAsStringSync(
+          "title: title-example\nurl: url.example.io\nemail: user@email.com");
     }
+    String configContent = configFile.readAsStringSync();
+    YamlMap configYaml = loadYaml(configContent);
+    globalProvider.setConfig(configYaml.cast());
   }
 }
