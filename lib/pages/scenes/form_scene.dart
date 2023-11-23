@@ -33,9 +33,9 @@ class FormScene extends StatelessWidget {
                             config[e.key] = value;
                             globalProvider.setConfig(config);
                             File configFile = File(join(globalProvider.blogDir,
-                                "_config", "_config.yml"));
+                                "_config", "_config.yaml"));
                             String configString = config.entries
-                                .map((e) => "${e.key}: ${e.value}\n")
+                                .map((e) => "${e.key}: \"${e.value}\"\n")
                                 .join();
                             configFile.writeAsString(configString);
                           });

@@ -32,7 +32,7 @@ Future<void> setupDir(GlobalProvider globalProvider) async {
       }
     }
 
-    String configPathFile = join(selectedDirectory, "_config", "_config.yml");
+    String configPathFile = join(selectedDirectory, "_config", "_config.yaml");
     File configFile = File(configPathFile);
     if (!configFile.existsSync()) {
       configFile.createSync(recursive: true);

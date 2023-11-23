@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ssbg_flutter/pages/editor.dart';
@@ -7,10 +9,19 @@ import 'package:ssbg_flutter/providers/list_provider.dart';
 import 'package:ssbg_flutter/providers/editor_provider.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
+import 'package:window_manager/window_manager.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await windowManager.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    WindowOptions windowOptions =
+        const WindowOptions(size: Size(800, 800), center: true);
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
   runApp(const MyApp());
 }
 
