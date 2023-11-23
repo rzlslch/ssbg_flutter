@@ -7,10 +7,10 @@ import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:provider/provider.dart';
 import 'package:ssbg_flutter/providers/editor_provider.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
+import 'package:ssbg_flutter/providers/page_provider.dart';
 import 'package:ssbg_flutter/scripts/generator.dart';
+import 'package:ssbg_flutter/widgets/action_button.dart';
 import 'package:ssbg_flutter/widgets/header_button.dart';
-
-import '../widgets/action_button.dart';
 
 class EditorPage extends StatelessWidget {
   const EditorPage({super.key});
@@ -23,6 +23,8 @@ class EditorPage extends StatelessWidget {
         TextEditingController(text: editorProvider.value);
     GlobalProvider globalProvider =
         Provider.of<GlobalProvider>(context, listen: false);
+    PageProvider pageProvider =
+        Provider.of<PageProvider>(context, listen: false);
     Timer? debounce;
     final FocusNode focusNode = FocusNode();
     return Column(
@@ -35,11 +37,20 @@ class EditorPage extends StatelessWidget {
         Row(
           children: [
             ActionButton(
-                function: () {
-                  generator(globalProvider, editorController.text);
-                },
-                text: "GENERATE",
-                icon: Icons.replay_rounded)
+                function: () {},
+                text: "GENERATE ALL",
+                icon: Icons.replay_rounded),
+            const SizedBox(
+              width: 10,
+            ),
+            pageProvider.isContent
+                ? ActionButton(
+                    function: () {
+                      generator(globalProvider, editorController.text);
+                    },
+                    text: "GENERATE",
+                    icon: Icons.replay_rounded)
+                : Container(),
           ],
         ),
         const SizedBox(

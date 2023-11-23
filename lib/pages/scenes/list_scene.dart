@@ -65,6 +65,12 @@ class ListScene extends StatelessWidget {
                       editorProvider.setValue(file.readAsStringSync());
                       editorProvider.setPath(e.path);
                       pageProvider.update(2);
+                      if (listProvider.dir == '_post' ||
+                          listProvider.dir == '_page') {
+                        pageProvider.setContent(true);
+                      } else {
+                        pageProvider.setContent(false);
+                      }
                     }))
                 .toList(),
           ),

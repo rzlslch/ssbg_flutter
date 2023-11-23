@@ -31,4 +31,12 @@ class PageProvider with ChangeNotifier {
     _pageType = _pageTypeForm;
     notifyListeners();
   }
+
+  bool _isContent = false;
+  bool get isContent => _isContent;
+
+  void setContent(bool isContent) {
+    _isContent = isContent;
+    notifyListeners();
+  }
 }

@@ -80,6 +80,7 @@ class HomePage extends StatelessWidget {
                               .cast<FileModel>()
                               .toList();
                           listProvider.setList(listFile);
+                          listProvider.setDir(menuDir);
                         },
                       )),
             ),

@@ -22,11 +22,6 @@ Future<String> generator(GlobalProvider globalProvider, String markdown) async {
       .cast<ConfigModel>()
       .toList();
 
-  List<ConfigModel> listPage = globalProvider.listPage
-      .map((e) => configScanner(File(e.path).readAsStringSync()).$1)
-      .cast<ConfigModel>()
-      .toList();
-
   final context = Context.create();
   context.variables['site'] = {
     'title': '@rzlslch',

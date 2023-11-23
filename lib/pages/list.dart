@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ssbg_flutter/pages/scenes/ListScene.dart';
+import 'package:ssbg_flutter/pages/scenes/list_scene.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
 import 'package:ssbg_flutter/widgets/header_button.dart';
 
