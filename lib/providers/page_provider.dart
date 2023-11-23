@@ -1,5 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+const String _pageTypeList = "list";
+const String _pageTypeForm = "form";
+
 class PageProvider with ChangeNotifier {
   int _pageIndex = 0;
   int get pageIndex => _pageIndex;
@@ -13,6 +16,19 @@ class PageProvider with ChangeNotifier {
     if (_pageIndex > 0) {
       _pageIndex--;
     }
+    notifyListeners();
+  }
+
+  String _pageType = _pageTypeList;
+  String get pageType => _pageType;
+
+  void setPageList() {
+    _pageType = _pageTypeList;
+    notifyListeners();
+  }
+
+  void setPageForm() {
+    _pageType = _pageTypeForm;
     notifyListeners();
   }
 }

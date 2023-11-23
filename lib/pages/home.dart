@@ -11,7 +11,7 @@ import 'package:ssbg_flutter/scripts/setup_dir.dart';
 import 'package:ssbg_flutter/widgets/menu_button.dart';
 
 List menu = <Map>[
-  {"title": "Config", "icon": Icons.settings, "folder": "config"},
+  {"title": "Config", "icon": Icons.settings, "folder": "_config"},
   {"title": "Include", "icon": Icons.note_add, "folder": "_include"},
   {"title": "Layout", "icon": Icons.format_align_left, "folder": "_layout"},
   {"title": "Page", "icon": Icons.find_in_page_sharp, "folder": "_page"},
@@ -42,39 +42,49 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Wrap(
-          direction: Axis.horizontal,
-          crossAxisAlignment: WrapCrossAlignment.start,
-          spacing: 40,
-          runSpacing: 40,
-          children: List.generate(
-              menu.length,
-              (index) => MenuButton(
-                    icon: menu[index]["icon"],
-                    text: menu[index]["title"],
-                    callback: () {
-                      pageProvider.update(1);
-                      var globDir = globalProvider.blogDir;
-                      var menuDir = menu[index]["folder"];
-                      var listFiles =
-                          Directory(join(globDir, menuDir)).listSync();
-                      List<FileModel> listFile = listFiles
-                          .map(
-                            (e) {
-                              String filename = e.path
-                                  .replaceAll(e.parent.path, "")
-                                  .substring(1);
-                              FileModel fileInfo =
-                                  FileModel(filename: filename, path: e.path);
-                              return fileInfo;
-                            },
-                          )
-                          .cast<FileModel>()
-                          .toList();
-                      listProvider.setList(listFile);
-                    },
-                  )),
-        ),
+        child: Consumer<GlobalProvider>(builder: (context, globalProvider, _) {
+          return Visibility(
+            visible: globalProvider.blogDir != "",
+            child: Wrap(
+              direction: Axis.horizontal,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              spacing: 40,
+              runSpacing: 40,
+              children: List.generate(
+                  menu.length,
+                  (index) => MenuButton(
+                        icon: menu[index]["icon"],
+                        text: menu[index]["title"],
+                        callback: () {
+                          var globDir = globalProvider.blogDir;
+                          var menuDir = menu[index]["folder"];
+                          if (menuDir == "_config") {
+                            pageProvider.setPageForm();
+                          } else {
+                            pageProvider.setPageList();
+                          }
+                          pageProvider.update(1);
+                          var listFiles =
+                              Directory(join(globDir, menuDir)).listSync();
+                          List<FileModel> listFile = listFiles
+                              .map(
+                                (e) {
+                                  String filename = e.path
+                                      .replaceAll(e.parent.path, "")
+                                      .substring(1);
+                                  FileModel fileInfo = FileModel(
+                                      filename: filename, path: e.path);
+                                  return fileInfo;
+                                },
+                              )
+                              .cast<FileModel>()
+                              .toList();
+                          listProvider.setList(listFile);
+                        },
+                      )),
+            ),
+          );
+        }),
       ),
     );
   }

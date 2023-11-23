@@ -1,21 +1,48 @@
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 import 'package:liquid_engine/liquid_engine.dart';
+import 'package:ssbg_flutter/models/config_model.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/scripts/html_scanner.dart';
 import 'package:ssbg_flutter/scripts/layout_scanner.dart';
 import 'package:ssbg_flutter/scripts/config_scanner.dart';
 import 'package:ssbg_flutter/scripts/md_scanner.dart';
 
-Future<void> generator(GlobalProvider globalProvider, String markdown) async {
+Future<String> generator(GlobalProvider globalProvider, String markdown) async {
   var mdConfig = configScanner(markdown);
   String layout = mdConfig.$1!.layout;
   String content = mdScanner(mdConfig.$2);
 
   var layoutScanned = layoutScanner(globalProvider, layout, content);
   var htmlScanned = htmlScanner(globalProvider, layoutScanned);
-  // print(htmlScanned);
+
+  List<ConfigModel> listPost = globalProvider.listPost
+      .map((e) => configScanner(File(e.path).readAsStringSync()).$1)
+      .cast<ConfigModel>()
+      .toList();
+
+  List<ConfigModel> listPage = globalProvider.listPage
+      .map((e) => configScanner(File(e.path).readAsStringSync()).$1)
+      .cast<ConfigModel>()
+      .toList();
+
   final context = Context.create();
-  context.variables['site'] = {'title': '@rzlslch'};
+  context.variables['site'] = {
+    'title': '@rzlslch',
+    'posts': [
+      ...listPost
+          .map((e) => {
+                'title': e.title,
+                'layout': e.layout,
+                'permalink': e.permalink,
+                'date': e.date,
+                'categories': e.categories,
+                'comments': e.comments
+              })
+          .toList()
+    ]
+  };
   context.variables['page'] = {
     'title': mdConfig.$1!.title,
     'date': mdConfig.$1!.date,
@@ -46,6 +73,9 @@ Future<void> generator(GlobalProvider globalProvider, String markdown) async {
 
     return formatted;
   };
+  print(context.variables);
   final template = Template.parse(context, Source.fromString(htmlScanned));
-  print(await template.render(context));
+  String render = await template.render(context);
+  print(render);
+  return render;
 }
