@@ -1,10 +1,12 @@
 import 'package:markdown/markdown.dart';
+import 'package:ssbg_flutter/models/list_model.dart';
+import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/scripts/md_highlighter.dart';
 
 String funcPrefix = "{%";
 String funcSuffix = "%}";
 
-String mdScanner(String markdown) {
+String mdScanner(GlobalProvider globalProvider, String markdown) {
   String mdContent = markdown;
 
   String mdHighlight = "";
@@ -24,11 +26,15 @@ String mdScanner(String markdown) {
         c = "";
       }
       if (funcChain[0] == "endhighlight") {
-        strFunc.add({"$strLang": mdHighlight});
+        strFunc.add({"type": "highlight", "$strLang": mdHighlight});
         startRecord = false;
         strLang = null;
         mdHighlight = "";
       }
+      if (funcChain[0] == "post_url") {
+        strFunc.add({"type": "post_url", "value": c});
+      }
+      ;
     } else {
       c += "\n";
     }
@@ -39,15 +45,35 @@ String mdScanner(String markdown) {
 
   // this is for the highlight
   for (var c in strFunc) {
-    var key = c.keys.firstOrNull;
-    var value = c.values.firstOrNull;
-    String hlHTML = mdHighlighter("$value", "$key");
-    String replaced =
-        "$funcPrefix highlight $key $funcSuffix\n$value$funcPrefix endhighlight $funcSuffix";
-    mdContent = mdContent.replaceAll(replaced, hlHTML);
+    String strType = c.entries.singleWhere((e) => e.key == "type").value;
+    String strKey = c.entries.singleWhere((e) => e.key != "type").key;
+    String strValue = c.entries.singleWhere((e) => e.key != "type").value;
+    if (strType == 'highlight') {
+      String hlHTML = mdHighlighter(strValue, strKey);
+      String replaced =
+          "$funcPrefix highlight $strKey $funcSuffix\n$strValue$funcPrefix endhighlight $funcSuffix";
+      mdContent = mdContent.replaceAll(replaced, hlHTML);
+    }
+    if (strType == 'post_url') {
+      mdContent = mdContent.replaceAll(
+          strValue, postURL(globalProvider.listPost, strValue));
+    }
   }
 
   String content = markdownToHtml(mdContent);
 
   return content;
+}
+
+String postURL(List<ListModel> post, String c) {
+  int idxPre = c.indexOf(funcPrefix);
+  int idxSuf = c.indexOf(funcSuffix);
+  if (idxPre > -1 && idxSuf > -1) {
+    List chain =
+        c.substring(idxPre + funcPrefix.length, idxSuf).trim().split(" ");
+    String replaced = "$funcPrefix ${chain[0]} ${chain[1]} $funcSuffix";
+    c = c.replaceAll(replaced, "test");
+    postURL(post, c);
+  }
+  return c;
 }

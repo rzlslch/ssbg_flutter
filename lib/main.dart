@@ -16,7 +16,7 @@ Future<void> main() async {
   await windowManager.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     WindowOptions windowOptions =
-        const WindowOptions(size: Size(800, 800), center: true);
+        const WindowOptions(size: Size(800, 800), center: true, title: "ssbg");
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();

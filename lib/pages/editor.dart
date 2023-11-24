@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:ssbg_flutter/providers/editor_provider.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
-import 'package:ssbg_flutter/scripts/generator.dart';
+import 'package:ssbg_flutter/scripts/generate_all.dart';
+import 'package:ssbg_flutter/scripts/generate_content.dart';
 import 'package:ssbg_flutter/widgets/action_button.dart';
 import 'package:ssbg_flutter/widgets/header_button.dart';
 
@@ -17,7 +18,7 @@ class EditorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EditorProvider editorProvider =
+    EditorProvider editorProvider =
         Provider.of<EditorProvider>(context, listen: false);
     GlobalProvider globalProvider =
         Provider.of<GlobalProvider>(context, listen: false);
@@ -37,7 +38,7 @@ class EditorPage extends StatelessWidget {
         Row(
           children: [
             ActionButton(
-                function: () {},
+                function: () => generateAll(globalProvider),
                 text: "GENERATE ALL",
                 icon: Icons.replay_rounded),
             const SizedBox(
@@ -45,9 +46,8 @@ class EditorPage extends StatelessWidget {
             ),
             pageProvider.isContent
                 ? ActionButton(
-                    function: () {
-                      generator(globalProvider, editorController.text);
-                    },
+                    function: () =>
+                        generateContent(globalProvider, editorProvider.path),
                     text: "GENERATE",
                     icon: Icons.replay_rounded)
                 : Container(),

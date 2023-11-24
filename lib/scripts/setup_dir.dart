@@ -37,7 +37,7 @@ Future<void> setupDir(GlobalProvider globalProvider) async {
     if (!configFile.existsSync()) {
       configFile.createSync(recursive: true);
       configFile.writeAsStringSync(
-          "title: title-example\nurl: url.example.io\nemail: user@email.com");
+          "title: title-example\nurl: url.example.io\nemail: user@email.com\nbuild: public");
     }
     String configContent = configFile.readAsStringSync();
     YamlMap configYaml = loadYaml(configContent);
