@@ -10,8 +10,11 @@ Future<void> generateAll(GlobalProvider globalProvider) async {
   String buildDir =
       globalProvider.config.entries.singleWhere((e) => e.key == "build").value;
   String dir = join(globalProvider.blogDir, buildDir);
-  Directory dirEmpty = Directory(dir);
-  for (var c in dirEmpty.listSync()) {
+  Directory dirBuild = Directory(dir);
+  if (dirBuild.existsSync()) {
+    dirBuild.createSync(recursive: true);
+  }
+  for (var c in dirBuild.listSync()) {
     c.deleteSync(recursive: true);
   }
   for (var c in listPage) {
@@ -21,6 +24,17 @@ Future<void> generateAll(GlobalProvider globalProvider) async {
   List<ListModel> listPost = globalProvider.listPost;
   for (var c in listPost) {
     await generate(globalProvider, c, buildDir);
+  }
+  String assetDir = "_assets";
+  Directory dirAsset = Directory(join(globalProvider.blogDir, assetDir));
+  for (var c in dirAsset.listSync(recursive: true)) {
+    String pathChoose = c.path
+        .replaceAll(dirAsset.path, join(globalProvider.blogDir, dirBuild.path));
+    if (c is Directory) {
+      Directory(pathChoose).createSync(recursive: true);
+    } else if (c is File) {
+      c.copySync(pathChoose);
+    }
   }
 }
 

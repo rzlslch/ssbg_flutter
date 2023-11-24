@@ -37,7 +37,6 @@ String mdScanner(GlobalProvider globalProvider, String markdown) {
       if (funcChain[0] == "post_url") {
         strFunc.add({"type": "post_url", "value": c});
       }
-      ;
     } else {
       c += "\n";
     }

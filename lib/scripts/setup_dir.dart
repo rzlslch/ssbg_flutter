@@ -42,5 +42,10 @@ Future<void> setupDir(GlobalProvider globalProvider) async {
     String configContent = configFile.readAsStringSync();
     YamlMap configYaml = loadYaml(configContent);
     globalProvider.setConfig(configYaml.cast());
+
+    Directory assetDir = Directory(join(selectedDirectory, "_assets"));
+    if (!assetDir.existsSync()) {
+      assetDir.createSync(recursive: true);
+    }
   }
 }
