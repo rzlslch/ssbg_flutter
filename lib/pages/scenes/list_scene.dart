@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ssbg_flutter/models/config_model.dart';
 import 'package:ssbg_flutter/models/list_model.dart';
 import 'package:ssbg_flutter/providers/editor_provider.dart';
 import 'package:ssbg_flutter/providers/list_provider.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
+import 'package:ssbg_flutter/scripts/config_scanner.dart';
 import 'package:ssbg_flutter/widgets/action_button.dart';
 import 'package:ssbg_flutter/widgets/list_button.dart';
 
@@ -63,9 +65,13 @@ class ListScene extends StatelessWidget {
                     title: e.filename,
                     function: () {
                       final File file = File(e.path);
+                      ListModel listModel = ListModel(file);
+                      ConfigModel? configModel = configScanner(listModel).$1;
                       editorProvider.setValue(file.readAsStringSync());
                       editorProvider.setPath(e.path);
-                      editorProvider.setModel(ListModel(file));
+                      editorProvider.setModel(listModel);
+                      editorProvider.setConfig(
+                          configModel ?? ConfigModel({"layout": ""}));
                       pageProvider.update(2);
                       if (listProvider.dir == '_post' ||
                           listProvider.dir == '_page') {

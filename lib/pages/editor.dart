@@ -46,8 +46,8 @@ class EditorPage extends StatelessWidget {
             ),
             pageProvider.isContent
                 ? ActionButton(
-                    function: () => generateContent(
-                        globalProvider, editorProvider.listModel),
+                    function: () => generateContent(globalProvider,
+                        editorProvider.listModel, editorProvider.configModel),
                     text: "GENERATE",
                     icon: Icons.replay_rounded)
                 : Container(),
