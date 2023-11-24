@@ -1,6 +1,5 @@
 import 'package:markdown/markdown.dart';
-import 'package:ssbg_flutter/models/list_model.dart';
-import 'package:ssbg_flutter/providers/global_provider.dart';
+import 'package:ssbg_flutter/models/config_model.dart';
 import 'package:ssbg_flutter/scripts/md_highlighter.dart';
 
 String funcPrefix = "{%";
@@ -9,7 +8,7 @@ String funcSuffix = "%}";
 String propPrefix = "{:";
 String propSuffix = "}";
 
-String mdScanner(GlobalProvider globalProvider, String markdown) {
+String mdScanner(List<ConfigModel> listPost, String markdown) {
   String mdContent = markdown;
 
   String mdHighlight = "";
@@ -65,8 +64,7 @@ String mdScanner(GlobalProvider globalProvider, String markdown) {
       mdContent = mdContent.replaceAll(replaced, hlHTML);
     }
     if (strType == 'post_url') {
-      mdContent = mdContent.replaceAll(
-          strValue, postURL(globalProvider.listPost, strValue));
+      mdContent = mdContent.replaceAll(strValue, postURL(listPost, strValue));
     }
     if (strType == 'prop') {
       mdContent = mdContent.replaceAll(strValue, "");
@@ -79,14 +77,15 @@ String mdScanner(GlobalProvider globalProvider, String markdown) {
   return content;
 }
 
-String postURL(List<ListModel> post, String c) {
+String postURL(List<ConfigModel> post, String c) {
   int idxPre = c.indexOf(funcPrefix);
   int idxSuf = c.indexOf(funcSuffix);
   if (idxPre > -1 && idxSuf > -1) {
     List chain =
         c.substring(idxPre + funcPrefix.length, idxSuf).trim().split(" ");
     String replaced = "$funcPrefix ${chain[0]} ${chain[1]} $funcSuffix";
-    c = c.replaceAll(replaced, "test");
+    ConfigModel x = post.singleWhere((e) => e.name == chain[1]);
+    c = c.replaceAll(replaced, x.permalink ?? x.url);
     postURL(post, c);
   }
   return c;

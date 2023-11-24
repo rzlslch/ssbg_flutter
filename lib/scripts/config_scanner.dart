@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:ssbg_flutter/models/config_model.dart';
+import 'package:ssbg_flutter/models/list_model.dart';
 
 String propPrefix = "---\n";
 String propSuffix = "\n---\n";
 
-(ConfigModel?, String) configScanner(String content) {
+(ConfigModel?, String) configScanner(ListModel model) {
+  String content = File(model.path).readAsStringSync();
   int propPrefixIndex = content.indexOf(propPrefix);
   int propSuffixIndex = content.lastIndexOf(propSuffix);
   String propString = "";

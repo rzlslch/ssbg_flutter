@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:intl/intl.dart';
 import 'package:liquid_engine/liquid_engine.dart';
 import 'package:ssbg_flutter/models/config_model.dart';
+import 'package:ssbg_flutter/models/list_model.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/scripts/html_scanner.dart';
 import 'package:ssbg_flutter/scripts/layout_scanner.dart';
@@ -10,20 +9,21 @@ import 'package:ssbg_flutter/scripts/config_scanner.dart';
 import 'package:ssbg_flutter/scripts/md_scanner.dart';
 
 Future<(ConfigModel, String)> generator(
-    GlobalProvider globalProvider, String path) async {
-  File file = File(path);
-  String markdown = file.readAsStringSync();
-  var mdConfig = configScanner(markdown);
+    GlobalProvider globalProvider, ListModel listModel) async {
+  List<ConfigModel> listPost = globalProvider.listPost
+      .map((e) {
+        ConfigModel map = configScanner(e).$1!;
+        map.name = e.name;
+        return map;
+      })
+      .cast<ConfigModel>()
+      .toList();
+  var mdConfig = configScanner(listModel);
   String layout = mdConfig.$1!.layout;
-  String content = mdScanner(globalProvider, mdConfig.$2);
+  String content = mdScanner(listPost, mdConfig.$2);
 
   var layoutScanned = layoutScanner(globalProvider, layout, content);
   var htmlScanned = htmlScanner(globalProvider, layoutScanned);
-
-  List<ConfigModel> listPost = globalProvider.listPost
-      .map((e) => configScanner(File(e.path).readAsStringSync()).$1)
-      .cast<ConfigModel>()
-      .toList();
 
   Map mapListPost = listPost.asMap();
   for (var c in mapListPost.entries) {
@@ -84,6 +84,5 @@ Future<(ConfigModel, String)> generator(
 
   final template = Template.parse(context, Source.fromString(htmlScanned));
   String render = await template.render(context);
-  // print(render);
   return (mdConfig.$1!, render);
 }

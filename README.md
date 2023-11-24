@@ -76,3 +76,5 @@ There're still a lot of dream features that I want to implement, and I will list
 
 - [ ] built in http server
 - [ ] input assets directly from the editor
+- [ ] code editor with syntax highlighting
+- [ ] settings. for example, create a template to generate a new post

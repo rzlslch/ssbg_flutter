@@ -8,6 +8,7 @@ class ConfigModel {
   String url = "";
   ConfigModel? prev;
   ConfigModel? next;
+  String? name;
 
   ConfigModel(Map<String, String> props) {
     layout = props["layout"]!;
@@ -25,6 +26,7 @@ class ConfigModel {
     if (props.containsKey("comments")) {
       comments = props["comments"] == "true" ? true : false;
     }
+    if (props.containsKey("name")) name = props["name"];
   }
 
   setPrev(ConfigModel prev) {

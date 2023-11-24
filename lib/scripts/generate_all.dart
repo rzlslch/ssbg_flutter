@@ -40,7 +40,7 @@ Future<void> generateAll(GlobalProvider globalProvider) async {
 
 Future<void> generate(
     GlobalProvider globalProvider, ListModel c, String buildDir) async {
-  var generate = await generator(globalProvider, c.path);
+  var generate = await generator(globalProvider, c);
   List chainLink = [];
   if (generate.$1.permalink != null) {
     chainLink = generate.$1.permalink!.split("/");

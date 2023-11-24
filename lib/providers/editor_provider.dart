@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:ssbg_flutter/models/list_model.dart';
 
 class EditorProvider with ChangeNotifier {
   String _path = "";
@@ -14,6 +15,14 @@ class EditorProvider with ChangeNotifier {
 
   void setValue(String value) {
     _value = value;
+    notifyListeners();
+  }
+
+  ListModel _listModel = ListModel(null);
+  ListModel get listModel => _listModel;
+
+  void setModel(ListModel listModel) {
+    _listModel = listModel;
     notifyListeners();
   }
 }
