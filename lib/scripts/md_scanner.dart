@@ -6,6 +6,9 @@ import 'package:ssbg_flutter/scripts/md_highlighter.dart';
 String funcPrefix = "{%";
 String funcSuffix = "%}";
 
+String propPrefix = "{:";
+String propSuffix = "}";
+
 String mdScanner(GlobalProvider globalProvider, String markdown) {
   String mdContent = markdown;
 
@@ -41,6 +44,14 @@ String mdScanner(GlobalProvider globalProvider, String markdown) {
     if (startRecord) {
       mdHighlight += c;
     }
+    int prPrefIdx = c.indexOf(propPrefix);
+    int prSuffIdx = c.lastIndexOf(propSuffix);
+    if (prPrefIdx > -1 && prSuffIdx > -1) {
+      strFunc.add({
+        "type": "prop",
+        "value": c.substring(prPrefIdx, prSuffIdx + propSuffix.length)
+      });
+    }
   }
 
   // this is for the highlight
@@ -58,9 +69,13 @@ String mdScanner(GlobalProvider globalProvider, String markdown) {
       mdContent = mdContent.replaceAll(
           strValue, postURL(globalProvider.listPost, strValue));
     }
+    if (strType == 'prop') {
+      mdContent = mdContent.replaceAll(strValue, "");
+    }
   }
 
-  String content = markdownToHtml(mdContent);
+  String content =
+      markdownToHtml(mdContent, extensionSet: ExtensionSet.gitHubWeb);
 
   return content;
 }
@@ -76,4 +91,8 @@ String postURL(List<ListModel> post, String c) {
     postURL(post, c);
   }
   return c;
+}
+
+String replaceProp(String c) {
+  return "";
 }
