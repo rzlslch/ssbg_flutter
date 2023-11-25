@@ -20,7 +20,7 @@ class ListProvider with ChangeNotifier {
 
   void addList(FileModel map) {
     _list.add(map);
-    _list = list.reversed.toList();
+    _list.sort((b, a) => a.filename.compareTo(b.filename));
     notifyListeners();
   }
 }

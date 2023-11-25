@@ -64,6 +64,7 @@ class HomePage extends StatelessWidget {
                             pageProvider.setPageList();
                           }
                           pageProvider.update(1);
+                          pageProvider.setPageDir(menuDir);
                           var listFiles =
                               Directory(join(globDir, menuDir)).listSync();
                           List<FileModel> listFile = listFiles

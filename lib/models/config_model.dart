@@ -70,4 +70,20 @@ class ConfigModel {
           : null
     };
   }
+
+  @override
+  toString() {
+    List<String> listTemplate = [];
+    listTemplate.add("layout: $layout");
+    if (title != null) listTemplate.add("title: $title");
+    if (permalink != null) listTemplate.add("permalink: $permalink");
+    if (date != null) listTemplate.add("date: $date");
+    if (categories != null) {
+      listTemplate.add("categories: ${categories?.join(",")}");
+    }
+    if (comments != null) listTemplate.add("comments: ${comments.toString()}");
+    return """---
+${listTemplate.join("\n")}
+---""";
+  }
 }

@@ -19,6 +19,14 @@ class PageProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String _pageDir = "";
+  String get pageDir => _pageDir;
+
+  void setPageDir(String dir) {
+    _pageDir = dir;
+    notifyListeners();
+  }
+
   String _pageType = _pageTypeList;
   String get pageType => _pageType;
 
