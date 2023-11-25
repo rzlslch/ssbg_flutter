@@ -8,19 +8,13 @@ import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/providers/list_provider.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
 
-void actionAddFile(GlobalProvider globalProvider, PageProvider pageProvider,
-    ListProvider listProvider, String value) {
+void actionAddFile(GlobalProvider glblPrvdr, PageProvider pgPrvdr,
+    ListProvider lstPrvdr, String value) {
   if (value == "") return;
-  Map<String, Function> x = {
-    "_post": (ListModel list) => globalProvider.addPost,
-    "_page": (ListModel list) => globalProvider.addPage,
-    "_include": (ListModel list) => globalProvider.addInclude,
-    "_layout": (ListModel list) => globalProvider.addLayout,
-  };
 
   String filename = "";
   String props = "";
-  if (pageProvider.pageDir == "_post") {
+  if (pgPrvdr.pageDir == "_post") {
     DateTime dateNow = DateTime.now();
     String dateTimeZone = timezoneCalc(dateNow.timeZoneOffset);
     String dateParse = "${dateNow.year}-${dateNow.month}-${dateNow.day}";
@@ -37,7 +31,7 @@ void actionAddFile(GlobalProvider globalProvider, PageProvider pageProvider,
       "comments": "true"
     }).toString();
     filename = "$filenameTemplate.md";
-  } else if (pageProvider.pageDir == "_page") {
+  } else if (pgPrvdr.pageDir == "_page") {
     String titleParse =
         value.trim().replaceAll(RegExp(r'[^\w\s]+'), '').split(" ").join("-");
     props = ConfigModel(
@@ -47,17 +41,18 @@ void actionAddFile(GlobalProvider globalProvider, PageProvider pageProvider,
   } else {
     filename = "$value.html";
   }
-  String targetFile =
-      join(globalProvider.blogDir, pageProvider.pageDir, filename);
+  String targetFile = join(glblPrvdr.blogDir, pgPrvdr.pageDir, filename);
   File target = File(targetFile);
   if (target.existsSync()) return;
   target.createSync(recursive: true);
   target.writeAsStringSync(props);
-  x.entries
-      .singleWhere((e) => e.key == pageProvider.pageDir)
-      .value(ListModel(target));
+  ListModel targetModel = ListModel(target);
+  if (pgPrvdr.pageDir == "_post") glblPrvdr.addPost(targetModel);
+  if (pgPrvdr.pageDir == "_page") glblPrvdr.addPage(targetModel);
+  if (pgPrvdr.pageDir == "_include") glblPrvdr.addInclude(targetModel);
+  if (pgPrvdr.pageDir == "_layout") glblPrvdr.addLayout(targetModel);
   FileModel fileModel = FileModel(filename: filename, path: target.path);
-  listProvider.addList(fileModel);
+  lstPrvdr.addList(fileModel);
 }
 
 String timezoneCalc(Duration timezone) {

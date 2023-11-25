@@ -45,6 +45,7 @@ dependencies:
   intl: ^0.18.1
   yaml: ^3.1.2
   window_manager: ^0.3.7
+  http_server: ^1.0.0
 
 dev_dependencies:
   flutter_test:

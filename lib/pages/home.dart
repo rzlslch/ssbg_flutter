@@ -25,18 +25,21 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     PageProvider pageProvider =
         Provider.of<PageProvider>(context, listen: false);
-    GlobalProvider globalProvider = Provider.of(context, listen: false);
+    // GlobalProvider globalProvider = Provider.of(context, listen: false);
     ListProvider listProvider = Provider.of(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        leading: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(1))),
-            onPressed: () => setupDir(globalProvider),
-            child: const SizedBox(
-                width: 200, child: Center(child: Icon(Icons.folder)))),
+        leading:
+            Consumer<GlobalProvider>(builder: (context, globalProvider, _) {
+          return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1))),
+              onPressed: () => setupDir(globalProvider),
+              child: const SizedBox(
+                  width: 200, child: Center(child: Icon(Icons.folder))));
+        }),
         title: Consumer<GlobalProvider>(
           builder: (context, globalProvider, _) => Text(globalProvider.blogDir),
         ),

@@ -79,3 +79,4 @@ There're still a lot of dream features that I want to implement, and I will list
 - [ ] code editor with syntax highlighting
 - [ ] settings. for example, create a template to generate a new post
 - [ ] theme. including template, config, etc
+- [ ] deploy to github/gitlab pages

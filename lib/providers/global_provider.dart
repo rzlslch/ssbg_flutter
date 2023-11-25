@@ -62,13 +62,13 @@ class GlobalProvider with ChangeNotifier {
 
   void addPost(ListModel listModel) {
     _listPost.add(listModel);
-    _listPost.sort((b, a) => a.name.compareTo(b.name));
+    _listPost.sort((b, a) => a.created.compareTo(b.created));
     notifyListeners();
   }
 
   void setPost(List<ListModel> list) {
     _listPost = list;
-    _listPost.sort((b, a) => a.name.compareTo(b.name));
+    _listPost.sort((b, a) => a.created.compareTo(b.created));
     notifyListeners();
   }
 }
