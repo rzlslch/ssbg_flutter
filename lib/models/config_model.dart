@@ -15,7 +15,7 @@ class ConfigModel {
     if (props.containsKey("title")) title = props["title"];
     if (props.containsKey("permalink")) {
       permalink = props["permalink"];
-      url = "${props["permalink"]}.html";
+      url = "${props["permalink"]}";
     } else {
       url = "${props["title"]?.replaceAll(RegExp(r' '), "-")}.html";
     }
