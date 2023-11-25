@@ -84,6 +84,7 @@ class ConfigModel {
     if (comments != null) listTemplate.add("comments: ${comments.toString()}");
     return """---
 ${listTemplate.join("\n")}
----""";
+---
+""";
   }
 }
