@@ -66,10 +66,10 @@ Expected feature that still on progress:
 
 - [x] generate page
 - [x] generate post
-- [ ] add post
-- [ ] add page
-- [ ] add include template
-- [ ] add layout template
+- [x] add post
+- [x] add page
+- [x] add include template
+- [x] add layout template
 - [ ] 404 resolver
 
 There're still a lot of dream features that I want to implement, and I will list them here:
@@ -78,3 +78,4 @@ There're still a lot of dream features that I want to implement, and I will list
 - [ ] input assets directly from the editor
 - [ ] code editor with syntax highlighting
 - [ ] settings. for example, create a template to generate a new post
+- [ ] theme. including template, config, etc
