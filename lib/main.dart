@@ -9,6 +9,7 @@ import 'package:ssbg_flutter/providers/list_provider.dart';
 import 'package:ssbg_flutter/providers/editor_provider.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
+import 'package:ssbg_flutter/providers/server_provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
@@ -59,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ChangeNotifierProvider(create: (ctx) => GlobalProvider()),
         ChangeNotifierProvider(create: (ctx) => ListProvider()),
         ChangeNotifierProvider(create: (ctx) => EditorProvider()),
+        ChangeNotifierProvider(create: (ctx) => ServerProvider()),
       ],
       child: Container(
         color: Colors.white,

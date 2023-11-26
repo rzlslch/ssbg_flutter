@@ -5,9 +5,11 @@ import 'package:http_server/http_server.dart';
 import 'package:path/path.dart';
 import 'package:ssbg_flutter/models/list_model.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
+import 'package:ssbg_flutter/providers/server_provider.dart';
 import 'package:yaml/yaml.dart';
 
-Future<void> setupDir(GlobalProvider globalProvider) async {
+Future<void> setupDir(
+    GlobalProvider globalProvider, ServerProvider serverProvider) async {
   List<Map<String, Function>> folder = [
     {"_include": globalProvider.setInclude},
     {"_layout": globalProvider.setLayout},
@@ -61,9 +63,12 @@ Future<void> setupDir(GlobalProvider globalProvider) async {
     };
 
     staticFile.jailRoot = true;
-    HttpServer server = await HttpServer.bind("127.0.0.1", 8080);
 
-    server.listen((HttpRequest request) {
+    if (serverProvider.server != null) serverProvider.server!.close();
+
+    serverProvider.setServer(await HttpServer.bind("127.0.0.1", 8080));
+
+    serverProvider.server!.listen((HttpRequest request) {
       List<String> chainLink = request.uri.path.split("/");
       String path = join(globalProvider.blogDir, buildDir);
       for (var c in chainLink) {

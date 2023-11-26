@@ -7,6 +7,7 @@ import 'package:ssbg_flutter/models/file_model.dart';
 import 'package:ssbg_flutter/providers/list_provider.dart';
 import 'package:ssbg_flutter/providers/global_provider.dart';
 import 'package:ssbg_flutter/providers/page_provider.dart';
+import 'package:ssbg_flutter/providers/server_provider.dart';
 import 'package:ssbg_flutter/scripts/setup_dir.dart';
 import 'package:ssbg_flutter/widgets/menu_button.dart';
 
@@ -26,7 +27,10 @@ class HomePage extends StatelessWidget {
     PageProvider pageProvider =
         Provider.of<PageProvider>(context, listen: false);
     // GlobalProvider globalProvider = Provider.of(context, listen: false);
-    ListProvider listProvider = Provider.of(context, listen: false);
+    ListProvider listProvider =
+        Provider.of<ListProvider>(context, listen: false);
+    ServerProvider serverProvider =
+        Provider.of<ServerProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading:
@@ -36,7 +40,7 @@ class HomePage extends StatelessWidget {
                   backgroundColor: Colors.amber,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(1))),
-              onPressed: () => setupDir(globalProvider),
+              onPressed: () => setupDir(globalProvider, serverProvider),
               child: const SizedBox(
                   width: 200, child: Center(child: Icon(Icons.folder))));
         }),
