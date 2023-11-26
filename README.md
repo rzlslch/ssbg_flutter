@@ -82,3 +82,7 @@ There're still a lot of dream features that I want to implement, and I will list
 - [ ] settings. for example, create a template to generate a new post
 - [ ] theme. including template, config, etc
 - [ ] deploy to github/gitlab pages
+
+## Update(s)
+
+- now you need not to have separate http server. when you load the target directory, it will automatically serves `localhost:8080` as your blog.
