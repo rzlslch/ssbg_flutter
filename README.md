@@ -76,7 +76,7 @@ There're still a lot of dream features that I want to implement, and I will list
 
 - [x] built in http server
   - [x] eeh.. kinda, but can't change build folder yet..
-  - [ ] change build folder and serve that folder instead
+  - [x] change build folder and serve that folder instead
 - [ ] input assets directly from the editor
 - [ ] code editor with syntax highlighting
 - [ ] settings. for example, create a template to generate a new post
